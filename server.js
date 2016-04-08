@@ -1,6 +1,5 @@
 var express = require("express");
 var ip   = "127.0.0.1";
-var port = 1337;
 var app = express();
 var fs = require('fs');
 app.set('view engine', 'jade');
@@ -26,9 +25,8 @@ function start(){
         //       data: { id: 'ba', source: 'b', target: 'a' }
         //     }
         // ];
-        data = fs.readFileSync('matrixtest.js', 'utf8');
+        data = fs.readFileSync('data/all.js', 'utf8');
         elements = JSON.parse(data);
-        console.log(elements);
         res.render('index', { title: 'HiDOS-Proteomics', message: 'HiDOS-Proteomics!', elements: elements});
     });
 
