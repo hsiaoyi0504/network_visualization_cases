@@ -1,8 +1,25 @@
 #cy {
     display: block;
-    width: 100%;
+    width: 80%;
     height: 100%;
     position: absolute;
     left: 0;
     top: 0;
+}
+
+#control {
+    display: block;
+    width: 20%;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+#nodeControl {
+	margin-top:20em;
+}
+
+#nodeNumInput {
+	/*margin-top:20em;*/
 }

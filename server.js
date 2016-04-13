@@ -25,7 +25,7 @@ function start(){
         //       data: { id: 'ba', source: 'b', target: 'a' }
         //     }
         // ];
-        data = fs.readFileSync('data/150.js', 'utf8');
+        data = fs.readFileSync('data/all.js', 'utf8');
         elements = JSON.parse(data);
         res.render('index', { title: 'HiDOS-Proteomics', message: 'HiDOS-Proteomics!', elements: elements});
     });

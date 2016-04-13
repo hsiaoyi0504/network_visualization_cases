@@ -37,13 +37,15 @@ console.log(arr.length+' genes are found in tandem MS');
 data = readfile('../data/human-uniprot-entry-name-biogrid-ID-mapping.txt','\r\n',true);
 var biogridID = [];
 var numNotFound = 0;
+var counter = 1;
 for(i=0; i<arr.length;i++) {
 	var j=0;
 	for(; j<data.length-1; j++){
 		if(data[j][0]==arr[i][2]){
 			tempArr=[];
 			tempArr.push(data[j][1]);
-			tempArr.push(arr[i][3]);
+			tempArr.push(counter);
+			counter++;
 			biogridID.push(tempArr);
 			break;
 		}
@@ -120,3 +122,5 @@ fs.writeFile('../data/all.js', JSON.stringify(data), function(err) {
 		console.log("Protein Network Output Saved");
 	}
 });
+console.log(data[10]);
+console.log(data[20]);

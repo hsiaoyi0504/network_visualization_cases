@@ -1,12 +1,11 @@
 doctype html
-html
-  head
-
-    title #{title}
-    style
-      include style.css
+<html>
+  <head>
+    <title> #{title}</html>
+    <style link="style.css">
     script
       include js/cytoscape.js
+  </head>
   body
     h1 #{message}
     #cy
@@ -54,4 +53,4 @@ html
         eles.restore();
         document.getElementById('nodeNumInput').value = cy.elements("node[weight > 0]").size();
         document.getElementById('nodeNum').innerHTML = '(Maximum:' + cy.elements("node[weight > 0]").size() +')';
-    
+</html>
