@@ -10,7 +10,7 @@ function start(){
     app.get('/', function (req, res) {
         data = fs.readFileSync('data/all.js', 'utf8');
         elements = JSON.parse(data);
-        res.render('index', { title: 'HiDOS-Proteomics',message: 'HiDOS-Proteomics!',elements: elements});
+        res.render('index', { title: 'HiDOS-Proteomics',elements: elements});
     });
 
     app.listen(3000, function () {
