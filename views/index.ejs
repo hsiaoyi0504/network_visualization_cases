@@ -3,21 +3,27 @@
     <title><%= title %></title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <scirpt src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></scirpt>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="js/cytoscape.js"></script>
   </head>
   <body>
     <div class="container">
-      <div class="col-*-10">
+      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+
+      </div>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
         <div id="cy"></div>
       </div>
-      <div class="col-*-2" id="control">
-        <div id="nodeNumInputDiv">
-          <div class="form-group">
-            <label id="nodeNumInputLabel" for="nodeNumInput">Type in the number of nodes:</label>
-            <input id="nodeNumInput" type="number" class="form-control"></input>
-            <button id="nodeNumUpdateButton" class="btn btn-primary">update</button>
+      <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" id="control">
+          <div id="nodeNumInputDiv">
+            <div class="form-group">
+              <label id="nodeNumInputLabel" for="nodeNumInput">Type in the number of nodes:</label>
+              <input id="nodeNumInput" type="number" class="form-control"></input>
+              <button id="nodeNumUpdateButton" class="btn btn-primary">update</button>
+            </div>
           </div>
-        </div>
       </div>
     </div>
     <script type="text/javascript">
@@ -53,7 +59,7 @@
         var collectionAll = cy.elements();
         var collection = cy.elements("node[weight > 0]");
         document.getElementById('nodeNumInputLabel').innerHTML = document.getElementById('nodeNumInputLabel').innerHTML + '(Maximum:' + cy.elements("node[weight > 0]").size() +')';
-        cy.elements("node[weight > 100]").remove();
+        cy.elements("node[weight > 50]").remove();
         var currentNodeNum = cy.elements("node[weight > 0]").size();
         document.getElementById('nodeNumInput').value = cy.elements("node[weight > 0]").size();
         cy.layout({name: 'cose'});
