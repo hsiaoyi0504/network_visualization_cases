@@ -2,16 +2,19 @@
   <head>
     <title><%= title %></title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheey" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-    <scirpt src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></scirpt>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="js/cytoscape.js"></script>
+    <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.11/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/2.6.8/cytoscape.js"></script>
   </head>
   <body>
     <div class="container">
       <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-
+        <table id="proteinTable" class="table table-striped table-bordered"></table>
       </div>
       <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
         <div id="cy"></div>
@@ -54,7 +57,6 @@
                 name: 'grid',
                 rows: 30
             }
-
         });
         var collectionAll = cy.elements();
         var collection = cy.elements("node[weight > 0]");
@@ -64,6 +66,44 @@
         document.getElementById('nodeNumInput').value = cy.elements("node[weight > 0]").size();
         cy.layout({name: 'cose'});
         cy.fit();
+        // var dataSet2=[];
+        // for(i=0;i<elements.length;i++){
+        //   if(typeof elements[i].data.source==='undefined'){
+        //     dataSet2.push(elements[i].data.id);
+        //   }else{
+        //     break;
+        //   }
+        // }
+        console.log(dataSet2);
+        var dataSet = [
+            [ "Tiger Nixon", "System Architect"],
+            [ "Garrett Winters", "Accountant"],
+            [ "Ashton Cox", "Junior Technical Author"],
+            [ "Cedric Kelly", "Senior Javascript Developer"],
+            [ "Airi Satou", "Accountant"],
+            [ "Brielle Williamson", "Integration Specialist"],
+            [ "Herrod Chandler", "Sales Assistant"],
+            [ "Rhona Davidson", "Integration Specialist"],
+            [ "Colleen Hurst", "Javascript Developer"],
+            [ "Sonya Frost", "Software Engineer"],
+            [ "Jena Gaines", "Office Manager"],
+            [ "Quinn Flynn", "Support Lead"],
+            [ "Charde Marshall", "Regional Director"],
+            [ "Haley Kennedy", "Senior Marketing Designer"],
+            [ "Tatyana Fitzpatrick", "Regional Director"],
+            [ "Michael Silva", "Marketing Designer"],
+            [ "Paul Byrd", "Chief Financial Officer (CFO)"]
+        ];
+         
+        $(document).ready(function() {
+            $('#proteinTable').DataTable( {
+                data: dataSet,
+                columns: [
+                    { title: "Short Name" },
+                    { title: "Full Name" },
+                ]
+            } );
+        } );
         document.getElementById('nodeNumUpdateButton').onclick = function(){
           if( document.getElementById('nodeNumInput').value != currentNodeNum ){
             collectionAll.restore();
