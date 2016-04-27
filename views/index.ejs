@@ -33,7 +33,7 @@
       var elements = <%- JSON.stringify(elements) %>;
       var cy = cytoscape({
             container: document.getElementById('cy'), // container to render in
-            elements: elements, //list of graph elements to start with
+            elements: elements[0], //list of graph elements to start with
             style: [ // the stylesheet for the graph
                 {
                   selector: 'node',
@@ -66,38 +66,15 @@
         document.getElementById('nodeNumInput').value = cy.elements("node[weight > 0]").size();
         cy.layout({name: 'cose'});
         cy.fit();
-        // var dataSet2=[];
-        // for(i=0;i<elements.length;i++){
-        //   if(typeof elements[i].data.source==='undefined'){
-        //     dataSet2.push(elements[i].data.id);
-        //   }else{
-        //     break;
-        //   }
-        // }
-        console.log(dataSet2);
-        var dataSet = [
-            [ "Tiger Nixon", "System Architect"],
-            [ "Garrett Winters", "Accountant"],
-            [ "Ashton Cox", "Junior Technical Author"],
-            [ "Cedric Kelly", "Senior Javascript Developer"],
-            [ "Airi Satou", "Accountant"],
-            [ "Brielle Williamson", "Integration Specialist"],
-            [ "Herrod Chandler", "Sales Assistant"],
-            [ "Rhona Davidson", "Integration Specialist"],
-            [ "Colleen Hurst", "Javascript Developer"],
-            [ "Sonya Frost", "Software Engineer"],
-            [ "Jena Gaines", "Office Manager"],
-            [ "Quinn Flynn", "Support Lead"],
-            [ "Charde Marshall", "Regional Director"],
-            [ "Haley Kennedy", "Senior Marketing Designer"],
-            [ "Tatyana Fitzpatrick", "Regional Director"],
-            [ "Michael Silva", "Marketing Designer"],
-            [ "Paul Byrd", "Chief Financial Officer (CFO)"]
-        ];
-         
+        var data=[];
+        for(i=0;i<elements[1].length;i++){
+          data.push([]);
+          data[i].push(elements[1][i][2]);
+          data[i].push(elements[1][i][1]);
+        }
         $(document).ready(function() {
             $('#proteinTable').DataTable( {
-                data: dataSet,
+                data: data,
                 columns: [
                     { title: "Short Name" },
                     { title: "Full Name" },

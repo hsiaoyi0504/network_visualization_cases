@@ -112,10 +112,10 @@ var foundEdges = _.intersection(edge, data);
 */
 data = [];
 data.push([]);
-for(i=0;i<foundEdges.length;i++){
+for(i=0;i<foundGene.length;i++){
 	data[0].push(
 		{
-			data: { id: foundEdges[i][2] , weight: Number(foundEdges[i][4]) }
+			data: { id: foundGene[i][2] , weight: Number(foundGene[i][4]) }
 		}
 	)
 }
