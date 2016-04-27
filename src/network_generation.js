@@ -19,6 +19,9 @@ function readfile(filePath,endOfLineCharacter,isSplit) {
 	return arr;
 }
 
+/*
+	read the identified proteins
+*/
 var fileNamePrefix = '';
 data = readfile('../data/spectral-counts.target.txt','\n',true);
 data.pop();
@@ -34,8 +37,17 @@ for(i=0; i<data.length;i++) {
 
 console.log(arr.length+' genes are found in tandem MS');
 
-data = readfile('../data/human-uniprot-entry-name-biogrid-ID-mapping.txt','\r\n',true);
+/*
+	mapping to bogrid ID
+*/ 
+// for winndows running
+// data = readfile('../data/human-uniprot-entry-name-biogrid-ID-mapping.txt','\r\n',true);
+// for mac testing
+data = readfile('../data/human-uniprot-entry-name-biogrid-ID-mapping.txt','\n',true);
+console.log(data);
+
 var biogridID = [];
+var geneNotFound = [];
 var numNotFound = 0;
 var counter = 1;
 for(i=0; i<arr.length;i++) {
@@ -52,12 +64,17 @@ for(i=0; i<arr.length;i++) {
 	}
 	if(j===data.length-1){
 		numNotFound++;
+		geneNotFound.push(arr[i][2]);
 	}
 
 }
 console.log(numNotFound +' genes are not found in BioGrid');
 console.log(biogridID.length + ' genes are matched in BioGrid');
 
+
+/*
+	find existing physical interactions
+*/
 data = readfile('../data/biogrid-interactor-ID-pairs.txt','\n',false);
 
 var edge = [];
@@ -78,6 +95,10 @@ for(i=0;i<biogridID.length;i++){
 
 var foundEdges = _.intersection(edge, data);
 
+/*
+	Transform to offical symbol
+*/
+
 data = readfile('../data/biogrid-ID-official-symbol-mapping.txt','\n',true);
 var geneName = [];
 for(i=0;i<biogridID.length;i++){
@@ -88,6 +109,10 @@ for(i=0;i<biogridID.length;i++){
 		}
 	}
 }
+
+/*
+	Create Network Data
+*/
 data=[];
 for(i=0;i<biogridID.length;i++){
 	data.push(
@@ -96,6 +121,8 @@ for(i=0;i<biogridID.length;i++){
 		}
 	)
 }
+
+//console.log(geneNotFound);
 
 for(i=0;i<foundEdges.length;i++){
 	foundEdges[i]=foundEdges[i].split('\t');
@@ -122,5 +149,4 @@ fs.writeFile('../data/all.js', JSON.stringify(data), function(err) {
 		console.log("Protein Network Output Saved");
 	}
 });
-console.log(data[10]);
-console.log(data[20]);
+
