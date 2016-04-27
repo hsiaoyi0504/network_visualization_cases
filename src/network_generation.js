@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const fs = require('fs');
 const _ = require('lodash');
 const math = require('math');
@@ -30,117 +31,114 @@ data.sort(function(a,b){
 });
 
 var arr = [];
+var temp;
 for(i=0; i<data.length;i++) {
-	arr.push(data[i][0].split('|'));
+	temp = data[i][0].split('|');
+	arr.push([]);
+	arr[i].push(temp[2]);
 	arr[i].push(data[i][1]);
 }
 
 console.log(arr.length+' genes are found in tandem MS');
 
-/*
-	mapping to bogrid ID
-*/ 
-// for winndows running
-// data = readfile('../data/human-uniprot-entry-name-biogrid-ID-mapping.txt','\r\n',true);
-// for mac testing
-data = readfile('../data/human-uniprot-entry-name-biogrid-ID-mapping.txt','\n',true);
-console.log(data);
+/* 
+	mapping to name and biogrid ID
+*/
 
-var biogridID = [];
+
+/* read mapping file */
+// for winndows running
+// data = readfile('../data/uniprot_name_info_plus_biogrid_ID.txt','\r\n',true);
+// for mac testing
+data = readfile('../data/uniprot_name_info_plus_biogrid_ID.txt','\n',true);
+data.pop();
+
+var foundGene = [];
 var geneNotFound = [];
-var numNotFound = 0;
 var counter = 1;
 for(i=0; i<arr.length;i++) {
 	var j=0;
-	for(; j<data.length-1; j++){
-		if(data[j][0]==arr[i][2]){
-			tempArr=[];
-			tempArr.push(data[j][1]);
+	for(; j<data.length; j++){
+		if(data[j][0]==arr[i][0]){
+			tempArr=data[j];
 			tempArr.push(counter);
 			counter++;
-			biogridID.push(tempArr);
+			foundGene.push(tempArr);
 			break;
 		}
 	}
-	if(j===data.length-1){
-		numNotFound++;
-		geneNotFound.push(arr[i][2]);
+	if(j===data.length){
+		geneNotFound.push(arr[i][0]);
 	}
-
 }
-console.log(numNotFound +' genes are not found in BioGrid');
-console.log(biogridID.length + ' genes are matched in BioGrid');
+var numNotFound = 0;
+for(i=0; i<foundGene.length;i++) {
+	if(foundGene[i][3]==='0'){
+		numNotFound++;
+	}
+}
 
+
+console.log(geneNotFound.length +' genes are not found in Uniprot');
+console.log(foundGene.length + ' genes are matched in Uniprot');
+console.log(numNotFound + ' genes can'+"'"+'t be matched to BioGrid');
 
 /*
 	find existing physical interactions
 */
 data = readfile('../data/biogrid-interactor-ID-pairs.txt','\n',false);
-
+/* produce the interactions want found */
 var edge = [];
-for(i=0;i<biogridID.length;i++){
-	for(j=0;j<biogridID.length;j++){
+for(i=0;i<foundGene.length;i++){
+	for(j=0;j<foundGene.length;j++){
 		if(i==j){
 			continue;
+		}else if(foundGene[i][3]==='0' || foundGene[j][3]==='0'){
 		}else{
-			if(biogridID[i][0]*1<biogridID[j][0]*1){
-				edge.push(biogridID[i][0]+'\t'+biogridID[j][0]);
+			if(foundGene[i][3]*1<foundGene[j][3]*1){
+				edge.push(foundGene[i][3]+'\t'+foundGene[j][3]);
 			}else{
-				edge.push(biogridID[j][0]+'\t'+biogridID[i][0]);
+				edge.push(foundGene[j][3]+'\t'+foundGene[i][3]);
 			}
 		}
 	}
 }
-
-
+/* find the interactions*/
 var foundEdges = _.intersection(edge, data);
 
-/*
-	Transform to offical symbol
-*/
-
-data = readfile('../data/biogrid-ID-official-symbol-mapping.txt','\n',true);
-var geneName = [];
-for(i=0;i<biogridID.length;i++){
-	for(j=0;j<data.length;j++){
-		if(data[j][0]==biogridID[i][0]){
-			geneName.push(data[j][1]);
-			break;
-		}
-	}
-}
 
 /*
 	Create Network Data
 */
-data=[];
-for(i=0;i<biogridID.length;i++){
-	data.push(
+data = [];
+data.push([]);
+for(i=0;i<foundEdges.length;i++){
+	data[0].push(
 		{
-			data: { id: geneName[i] , weight: Number(biogridID[i][1]) }
+			data: { id: foundEdges[i][2] , weight: Number(foundEdges[i][4]) }
 		}
 	)
 }
 
-//console.log(geneNotFound);
-
 for(i=0;i<foundEdges.length;i++){
 	foundEdges[i]=foundEdges[i].split('\t');
 	for(j=0;j<2;j++){
-		for(k=0;k<geneName.length;k++){
-			if(foundEdges[i][j]==biogridID[k][0]){
-				foundEdges[i][j]=geneName[k];
+		for(k=0;k<foundGene.length;k++){
+			if(foundEdges[i][j]==foundGene[k][3]){
+				foundEdges[i][j]=foundGene[k][2];
 				break;
 			}
 		}
 	}
-	data.push(
+	data[0].push(
 		{
 			data: { id: foundEdges[i][0]+'-'+foundEdges[i][1], source: foundEdges[i][0], target: foundEdges[i][1] }
 		}
 	)
 }
-console.log(data.length+' interactions are found in BioGrid');
+console.log(foundEdges.length+' interactions are found in BioGrid');
+data.push([]);
+data[1]=foundGene;
 fs.writeFile('../data/all.js', JSON.stringify(data), function(err) {
 	if(err) {
 	    console.log(err);
