@@ -71,6 +71,9 @@ for(i=0; i<arr.length;i++) {
 		geneNotFound.push(arr[i][0]);
 	}
 }
+
+
+
 var numNotFound = 0;
 for(i=0; i<foundGene.length;i++) {
 	if(foundGene[i][3]==='0'){
@@ -94,6 +97,7 @@ for(i=0;i<foundGene.length;i++){
 		if(i==j){
 			continue;
 		}else if(foundGene[i][3]==='0' || foundGene[j][3]==='0'){
+			continue;
 		}else{
 			if(foundGene[i][3]*1<foundGene[j][3]*1){
 				edge.push(foundGene[i][3]+'\t'+foundGene[j][3]);
@@ -107,17 +111,39 @@ for(i=0;i<foundGene.length;i++){
 var foundEdges = _.intersection(edge, data);
 
 
+/* check if the gene name is only presented once */
+var isOnce = [];
+var tempArr = [];
+for(i=0;i<foundGene.length;i++){
+	tempArr.push(foundGene[i][2]);
+}
+for(i=0;i<tempArr.length;i++){
+	if(_.indexOf(tempArr,tempArr[i])!==_.lastIndexOf(tempArr,tempArr[i])){
+		isOnce.push(false);
+	}else{
+		isOnce.push(true);
+	}
+}
+tempArr = [];
 /*
 	Create Network Data
 */
 data = [];
 data.push([]);
 for(i=0;i<foundGene.length;i++){
-	data[0].push(
-		{
-			data: { id: foundGene[i][2] , weight: Number(foundGene[i][4]) }
-		}
-	)
+	if(isOnce[i]){
+		data[0].push(
+			{
+				data: { id: foundGene[i][2] , weight: Number(foundGene[i][4]) }
+			}
+		);
+	}else{
+		data[0].push(
+			{
+				data: { id: foundGene[i][1].replace(/ /gi,'_') , weight: Number(foundGene[i][4]) }
+			}
+		)
+	}
 }
 
 for(i=0;i<foundEdges.length;i++){
@@ -125,7 +151,11 @@ for(i=0;i<foundEdges.length;i++){
 	for(j=0;j<2;j++){
 		for(k=0;k<foundGene.length;k++){
 			if(foundEdges[i][j]==foundGene[k][3]){
-				foundEdges[i][j]=foundGene[k][2];
+				if(isOnce[k]){
+					foundEdges[i][j]=foundGene[k][2];
+				}else{
+					foundEdges[i][j]=foundGene[k][1].replace(/ /gi,'_');
+				}
 				break;
 			}
 		}
@@ -147,4 +177,3 @@ fs.writeFile('../data/all.js', JSON.stringify(data), function(err) {
 		console.log("Protein Network Output Saved");
 	}
 });
-

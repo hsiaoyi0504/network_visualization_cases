@@ -16,17 +16,37 @@ div.container {
 
 #control {
 /*    display: block;
-    width: 20%;
+    
     height: 100%;
     position: absolute;
     right: 0;
     top: 0;*/
+    padding: 0;
 }
 
-#nodeControl {/*
-	margin-top:20em;*/
+#nodeNumInputLabelDiv {
+    padding: 0;
+    float: left;
 }
 
-#nodeNumInput {
-	/*margin-top:20em;*/
+#nodeNumInputDiv {
+    padding: 0;
+}
+
+#nodeNumUpdateButton {
+
+}
+
+#nodeNumUpdateButtonDiv {
+    padding: 0;
+    float: left;
+}
+
+#proteinTable tr td {
+    height: 10px;
+    padding: 0;
+}
+
+
+#proteinTable th {
 }

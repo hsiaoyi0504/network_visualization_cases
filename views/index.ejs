@@ -13,20 +13,28 @@
   </head>
   <body>
     <div class="container">
-      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-        <table id="proteinTable" class="table table-striped table-bordered"></table>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" id="control">
+        <div class="row">
+            <div id="nodeNumInputDiv">
+              <div class="form-group">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" id="nodeNumInputLabelDiv">
+                  <label id="nodeNumInputLabel" for="nodeNumInput">Type in the number of nodes:</label>
+                </div>
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" id="nodeNumInputDiv">
+                  <input id="nodeNumInput" type="number" class="form-control"></input>
+                </div>
+                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" id="nodeNumUpdateButtonDiv">
+                  <button id="nodeNumUpdateButton" class="btn btn-primary">update</button>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="row">
+          <table id="proteinTable" class="table table-striped table-bordered table-condensed "></table>
+        </div>
       </div>
       <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
         <div id="cy"></div>
-      </div>
-      <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" id="control">
-          <div id="nodeNumInputDiv">
-            <div class="form-group">
-              <label id="nodeNumInputLabel" for="nodeNumInput">Type in the number of nodes:</label>
-              <input id="nodeNumInput" type="number" class="form-control"></input>
-              <button id="nodeNumUpdateButton" class="btn btn-primary">update</button>
-            </div>
-          </div>
       </div>
     </div>
     <script type="text/javascript">
@@ -60,7 +68,7 @@
         });
         var collectionAll = cy.elements();
         var collection = cy.elements("node[weight > 0]");
-        document.getElementById('nodeNumInputLabel').innerHTML = document.getElementById('nodeNumInputLabel').innerHTML + '(Maximum:' + cy.elements("node[weight > 0]").size() +')';
+        document.getElementById('nodeNumInputLabel').innerHTML = document.getElementById('nodeNumInputLabel').innerHTML + '(Maximum:' + (cy.elements("node").size()) +')';
         cy.elements("node[weight > 50]").remove();
         var currentNodeNum = cy.elements("node[weight > 0]").size();
         document.getElementById('nodeNumInput').value = cy.elements("node[weight > 0]").size();
@@ -68,9 +76,12 @@
         cy.fit();
         var data=[];
         for(i=0;i<elements[1].length;i++){
-          data.push([]);
-          data[i].push(elements[1][i][2]);
-          data[i].push(elements[1][i][1]);
+            data.push([
+              elements[1][i][2],
+              elements[1][i][1]
+            ]);
+            // data[i].push(elements[1][i][2]);
+            // data[i].push(elements[1][i][1]);
         }
         $(document).ready(function() {
             $('#proteinTable').DataTable( {
@@ -78,7 +89,9 @@
                 columns: [
                     { title: "Short Name" },
                     { title: "Full Name" },
-                ]
+                ],
+                lengthMenu: [[50,100,150,-1],[50,100,150,'All']],
+                scrollX: true
             } );
         } );
         document.getElementById('nodeNumUpdateButton').onclick = function(){
