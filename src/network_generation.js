@@ -62,6 +62,9 @@ for(i=0; i<arr.length;i++) {
 		if(data[j][0]==arr[i][0]){
 			tempArr=data[j];
 			tempArr.push(counter);
+			
+			tempArr.push(Number(arr[i][1]))
+			
 			counter++;
 			foundGene.push(tempArr);
 			break;
@@ -71,8 +74,6 @@ for(i=0; i<arr.length;i++) {
 		geneNotFound.push(arr[i][0]);
 	}
 }
-
-
 
 var numNotFound = 0;
 for(i=0; i<foundGene.length;i++) {
@@ -144,6 +145,7 @@ for(i=0;i<foundGene.length;i++){
 			}
 		)
 	}
+	foundGene[i].push(isOnce[i]);
 }
 
 for(i=0;i<foundEdges.length;i++){

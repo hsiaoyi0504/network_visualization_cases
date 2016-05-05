@@ -5,6 +5,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheey" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.2/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
@@ -35,6 +37,9 @@
       </div>
       <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
         <div id="cy"></div>
+        <i class="fa fa-refresh" id="refresh" aria-hidden="true"></i>
+        <i class="fa fa-expand" id="expand" aria-hidden="true"></i>
+        <i class="fa fa-compress" id="compress" aria-hidden="true"></i>
       </div>
     </div>
     <script type="text/javascript">
@@ -59,8 +64,16 @@
                     'target-arrow-color': '#ccc',
                     'target-arrow-shape': 'triangle'
                   }
+                },
+                {
+                  selector: ':selected',
+                  style: {
+                    'background-color': 'blue'
+                  } 
                 }
             ],
+            boxSelectionEnabled: true,
+            selectionType: 'additive',
             layout: {
                 name: 'grid',
                 rows: 30
@@ -78,20 +91,43 @@
         for(i=0;i<elements[1].length;i++){
             data.push([
               elements[1][i][2],
-              elements[1][i][1]
+              elements[1][i][1],
+              elements[1][i][5],
+              elements[1][i][6]
             ]);
-            // data[i].push(elements[1][i][2]);
-            // data[i].push(elements[1][i][1]);
         }
         $(document).ready(function() {
-            $('#proteinTable').DataTable( {
+            var table = $('#proteinTable').DataTable( {
                 data: data,
                 columns: [
                     { title: "Short Name" },
                     { title: "Full Name" },
+                    { title: "Relative Abundance (emPAI)"},
+                    { title: "isOnce", visible: false}
                 ],
                 lengthMenu: [[50,100,150,-1],[50,100,150,'All']],
-                scrollX: true
+                scrollX: true,
+                order: [[ 2, "desc" ]]
+            } );
+
+            $('#proteinTable tbody').on( 'click', 'tr', function () {
+                // $(this).toggleClass('selected');
+                temp = table.rows('.selected').data();
+                for(var i=0;i<temp.length;i++){
+                  if(temp[i][3]){
+                      cy.getElementById(temp[i][0]).json({selected: true});
+                  }else{
+                      cy.getElementById(temp[i][1].replace(/ /gi,'_')).json({selected: true});
+                  }
+                }
+                // temp = table.rows({ selected: false }).data();
+                // for(var i=0;i<temp.length;i++){
+                //   if(temp[i][3]){
+                //       cy.getElementById(temp[i][0]).json({selected: false});
+                //   }else{
+                //       cy.getElementById(temp[i][1].replace(/ /gi,'_')).json({selected: false});
+                //   }
+                // }
             } );
         } );
         document.getElementById('nodeNumUpdateButton').onclick = function(){
@@ -103,7 +139,18 @@
             cy.layout({name: 'cose'});
             cy.fit();
           }
-        }
+        };
+        document.getElementById('refresh').onclick = function(){
+          cy.fit();
+        };
+        document.getElementById('expand').onclick = function(){
+          if(cy.zoom()*2<=cy.maxZoom())
+            cy.zoom(cy.zoom()*2);
+        };
+        document.getElementById('compress').onclick = function(){
+          if(cy.zoom()/2>=cy.minZoom())
+            cy.zoom(cy.zoom()/2);
+        };
     </script>
   </body>
 </html>
