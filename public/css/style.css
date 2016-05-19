@@ -47,3 +47,11 @@ div.container {
 
 #proteinTable th {
 }
+
+.selected td {
+    background-color: red !important; /* Add !important to make sure override datables base styles */
+ }
+
+.selected-out td {
+    background-color: blue !important;
+}
