@@ -11,47 +11,17 @@ div.container {
     height: 100%;
 }
 
-#control {
-/*    display: block;
-    
-    height: 100%;
-    position: absolute;
-    right: 0;
-    top: 0;*/
-    padding: 0;
-}
-
-#nodeNumInputLabelDiv {
-    padding: 0;
-    float: left;
-}
-
-#nodeNumInputDiv {
-    padding: 0;
-}
-
-#nodeNumUpdateButton {
-
-}
-
-#nodeNumUpdateButtonDiv {
-    padding: 0;
-    float: left;
-}
-
-#proteinTable tr td {
+#geneTable tr td {
     /*height: 10px;*/
     padding: 0;
 }
 
-
-#proteinTable th {
+@media (min-width: 768px){
+    .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9 {
+         float: none; 
+    }
 }
 
 .selected td {
-    background-color: red !important; /* Add !important to make sure override datables base styles */
+    background-color: yellow !important; /* Add !important to make sure override datables base styles */
  }
-
-.selected-out td {
-    background-color: blue !important;
-}
