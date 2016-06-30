@@ -1,1 +1,0 @@
-Rscript --vanilla GO_analysis.R ../data/spectral-counts.target.txt ../data/enrichment
