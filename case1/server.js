@@ -8,10 +8,21 @@ function start(){
 
 
     app.get('/', function (req, res) {
-        data = fs.readFileSync('data/Positive-ReDraw-.json', 'utf8');
+        res.render('index', { title: 'Supporting Info'});
+    });
+
+    app.get('/1', function(req, res){
+    	data = fs.readFileSync('data/Positive-ReDraw-.json', 'utf8');
         elements = JSON.parse(data);
         elements = elements.elements;
-        res.render('index', { title: 'HiDOS-Proteomics',elements: elements});
+        res.render('template', { title: 'Network1', cy_data: elements});
+    });
+
+    app.get('/2', function(req, res){
+    	data = fs.readFileSync('data/Positive-ReDraw--.json', 'utf8');
+        elements = JSON.parse(data);
+        elements = elements.elements;
+        res.render('template', { title: 'Network2', cy_data: elements});
     });
 
     app.listen(3000, function () {
